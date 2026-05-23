@@ -4,25 +4,25 @@ namespace ToDoList.Application.Common.Results;
 
 public sealed class Result<TValue> : Result
 {
-    private readonly TValue? _value;
+    private TValue? RawValue { get; }
 
     public TValue Value => IsSuccess
-        ? _value!
+        ? RawValue!
         : throw new InvalidOperationException("Cannot access value of a failure result.");
 
     private Result(TValue value) : base(true, Error.None)
     {
-        _value = value;
+        RawValue = value;
     }
 
     private Result(Error error) : base(false, error)
     {
-        _value = default;
+        RawValue = default;
     }
 
     public static Result<TValue> Success(TValue value) => new(value);
 
-    public static new Result<TValue> Failure(Error error) => new(error);
+    public new static Result<TValue> Failure(Error error) => new(error);
 
     public static implicit operator Result<TValue>(TValue value) => Success(value);
 

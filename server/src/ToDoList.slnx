@@ -1,6 +1,8 @@
 ﻿<Solution>
     <Folder Name="/SolutionItems/">
+        <File Path="../../.dockerignore" />
         <File Path="../../.gitignore" />
+        <File Path="../../docker-compose.yml" />
     </Folder>
     <Project Path="ToDoList.API\ToDoList.API.csproj" />
     <Project Path="ToDoList.Application/ToDoList.Application.csproj" />

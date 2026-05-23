@@ -1,12 +1,9 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.OpenApi;
 using Scalar.AspNetCore;
+using Serilog;
 using ToDoList.Application;
 using ToDoList.API.Endpoints;
 using ToDoList.API.Extensions;
 using ToDoList.API.Middleware;
-using ToDoList.API.Security;
 using ToDoList.Infrastructure;
 
 namespace ToDoList.API;
@@ -17,19 +14,17 @@ public abstract class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Host.UseSerilog((ctx, config) =>
+            config.ReadFrom.Configuration(ctx.Configuration));
+
         // Add services to the container.
-        builder.Services.AddAuthorization();
-
-        builder.Services.AddHttpContextAccessor();
-
-        builder.Services.AddEndpointsApiExplorer();
-
-        builder.Services.AddAuthorizationBuilder();
+        builder.Services.AddAuthorization()
+            .AddHttpContextAccessor()
+            .AddEndpointsApiExplorer();
 
         builder.Services.AddApplication();
-        builder.Services.AddInfrastructure(builder.Configuration);
-
-        builder.Services.AddAuth(builder.Configuration);
+        builder.Services.AddInfrastructure(builder.Configuration)
+            .AddAuth(builder.Configuration);
 
         builder.Services.AddProblemDetails();
         builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
@@ -40,6 +35,7 @@ public abstract class Program
         var app = builder.Build();
 
         app.UseExceptionHandler();
+        app.UseSerilogRequestLogging();
 
         app.MapOpenApi();
 
@@ -62,6 +58,7 @@ public abstract class Program
 
         app.UseHttpsRedirection();
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapUserEndpoints();

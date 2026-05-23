@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using ToDoList.Application.Abstractions;
 using ToDoList.Application.Common.Errors;
 using ToDoList.Application.Common.Results;
@@ -11,8 +12,8 @@ using ToDoList.Domain.Entities;
 namespace ToDoList.Application.Feature.Users.Handlers;
 
 public sealed class SignInCommandHandler(
+    ILogger<SignInCommandHandler> logger,
     UserManager<ApplicationUser> userManager,
-    IValidator<SignInCommand> validator,
     ITokenService tokenService)
     : IRequestHandler<SignInCommand, Result<AuthResponseModel>>
 {
@@ -20,22 +21,12 @@ public sealed class SignInCommandHandler(
         SignInCommand request,
         CancellationToken cancellationToken)
     {
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
-
-        if (!validationResult.IsValid)
-        {
-            var firstError = validationResult.Errors.First();
-
-            return Result<AuthResponseModel>.Failure(
-                Error.Validation(
-                    firstError.ErrorCode,
-                    firstError.ErrorMessage));
-        }
-
         var user = await userManager.FindByEmailAsync(request.Email);
 
         if (user is null)
         {
+            logger.LogWarning("Sign-in failed. User not found for {Email}", request.Email);
+
             return Result<AuthResponseModel>.Failure(UserErrors.InvalidCredentials);
         }
 
@@ -43,10 +34,19 @@ public sealed class SignInCommandHandler(
 
         if (!isPasswordValid)
         {
+            logger.LogWarning(
+                "Sign-in failed. Invalid password for user {UserId}",
+                user.Id);
+
             return Result<AuthResponseModel>.Failure(UserErrors.InvalidCredentials);
         }
 
         var token = tokenService.GenerateAccessToken(user);
+
+        logger.LogInformation(
+            "Sign-in succeeded for user {UserId} with email {Email}",
+            user.Id,
+            user.Email);
 
         var response = new AuthResponseModel(
             UserId: user.Id,

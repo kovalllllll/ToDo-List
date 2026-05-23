@@ -10,6 +10,10 @@ public class SignUpCommandValidator : AbstractValidator<SignUpCommand>
         RuleFor(x => x.Email)
             .NotEmpty()
             .EmailAddress();
+        
+        RuleFor(x => x.UserName)
+            .NotEmpty()
+            .MinimumLength(3);
 
         RuleFor(x => x.Password)
             .NotEmpty()
