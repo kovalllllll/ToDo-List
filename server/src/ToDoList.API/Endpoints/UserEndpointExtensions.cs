@@ -15,15 +15,16 @@ public static class UserEndpointExtensions
                 var result = await sender.Send(command, cancellationToken);
 
                 return result.ToMinimalApiResult();
-            });
+            }).WithTags("Users");
 
         app.MapPost(ApiRoutes.Users.SignIn,
-            async (SignInCommand command, ISender sender, CancellationToken cancellationToken) =>
-            {
-                var result = await sender.Send(command, cancellationToken);
+                async (SignInCommand command, ISender sender, CancellationToken cancellationToken) =>
+                {
+                    var result = await sender.Send(command, cancellationToken);
 
-                return result.ToMinimalApiResult();
-            }).RequireAuthorization();
+                    return result.ToMinimalApiResult();
+                }).RequireAuthorization()
+            .WithTags("Users");
 
         return app;
     }

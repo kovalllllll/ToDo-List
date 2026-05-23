@@ -6,18 +6,18 @@ namespace ToDoList.Infrastructure.Identity;
 
 public class CurrentUserService(IHttpContextAccessor httpContextAccessor) : ICurrentUserService
 {
-    public Guid? UserId
+    public Guid UserId
     {
         get
         {
             var userIdValue = httpContextAccessor
                 .HttpContext?
-                .User?
+                .User
                 .FindFirstValue(ClaimTypes.NameIdentifier);
-
-            return Guid.TryParse(userIdValue, out var userId)
-                ? userId
-                : null;
+            
+            return userIdValue == null
+                ? throw new UnauthorizedAccessException("User is not authenticated or NameIdentifier claim missing")
+                : Guid.Parse(userIdValue);
         }
     }
 

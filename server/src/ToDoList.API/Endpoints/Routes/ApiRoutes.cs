@@ -10,4 +10,14 @@ public abstract class ApiRoutes
         public const string SignUp = BaseRoute + "/sign-up";
         public const string SignIn = BaseRoute + "/sign-in";
     }
+
+    public static class Projects
+    {
+        private const string BaseRoute = Base + "/projects";
+        public const string Create = BaseRoute;
+        public const string GetAll = BaseRoute;
+        public const string GetById = BaseRoute + "/{projectId}";
+        public const string Update = BaseRoute + "/{projectId}";
+        public const string Delete = BaseRoute + "/{projectId}";
+    }
 }

@@ -21,6 +21,7 @@ public static class ApplicationExtensions
         });
 
         services.AddValidatorsFromAssembly(typeof(ApplicationExtensions).Assembly);
+        
 
         return services;
     }
