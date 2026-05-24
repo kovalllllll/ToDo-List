@@ -47,6 +47,7 @@ public class CreateProjectCommandHandler(
             project.Name,
             project.Description,
             project.Color,
+            project.IsSystem,
             project.CreatedAtUtc,
             []);
 

@@ -8,6 +8,7 @@ public record ProjectResponseModel(
     string Name,
     string? Description,
     string? Color,
+    bool IsSystem,
     DateTime CreatedAt,
     IReadOnlyCollection<TaskItemResponseModel> Tasks
 );

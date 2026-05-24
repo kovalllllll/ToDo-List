@@ -17,4 +17,11 @@
       <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Feature\TaskItems\Commands\" />
+      <Folder Include="Feature\TaskItems\Handlers\" />
+      <Folder Include="Feature\TaskItems\Queries\" />
+      <Folder Include="Feature\TaskItems\Validators\" />
+    </ItemGroup>
+
 </Project>

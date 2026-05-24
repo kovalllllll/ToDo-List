@@ -33,8 +33,8 @@ public class ProjectRepository(IDbConnectionFactory connectionFactory) : IProjec
     public async Task CreateAsync(Project project, CancellationToken cancellationToken)
     {
         const string sql = """
-                           INSERT INTO Projects (Id, UserId, Name, Description, Color, CreatedAtUtc)
-                           VALUES (@Id, @UserId, @Name, @Description, @Color, @CreatedAtUtc);
+                           INSERT INTO Projects (Id, UserId, Name, Description, Color, IsSystem, CreatedAtUtc)
+                           VALUES (@Id, @UserId, @Name, @Description, @Color, @IsSystem, @CreatedAtUtc);
                            """;
 
         using var connection = connectionFactory.CreateConnection();
@@ -48,6 +48,7 @@ public class ProjectRepository(IDbConnectionFactory connectionFactory) : IProjec
                 project.Name,
                 project.Description,
                 project.Color,
+                project.IsSystem,
                 project.CreatedAtUtc
             },
             cancellationToken: cancellationToken));
@@ -65,6 +66,7 @@ public class ProjectRepository(IDbConnectionFactory connectionFactory) : IProjec
                                Name,
                                Description,
                                Color,
+                               IsSystem,
                                CreatedAtUtc
                            FROM Projects
                            WHERE Id = @ProjectId AND UserId = @UserId;
@@ -108,6 +110,7 @@ public class ProjectRepository(IDbConnectionFactory connectionFactory) : IProjec
             project.Name,
             project.Description,
             project.Color,
+            project.IsSystem,
             project.CreatedAtUtc,
             tasks);
     }
@@ -122,10 +125,11 @@ public class ProjectRepository(IDbConnectionFactory connectionFactory) : IProjec
                                Name,
                                Description,
                                Color,
+                               IsSystem,
                                CreatedAtUtc
                            FROM Projects
                            WHERE UserId = @UserId
-                           ORDER BY CreatedAtUtc DESC;
+                           ORDER BY IsSystem DESC, CreatedAtUtc DESC;
 
                            SELECT
                                t.Id,
@@ -162,9 +166,28 @@ public class ProjectRepository(IDbConnectionFactory connectionFactory) : IProjec
                 project.Name,
                 project.Description,
                 project.Color,
+                project.IsSystem,
                 project.CreatedAtUtc,
                 tasksByProjectId.GetValueOrDefault(project.Id, Array.Empty<TaskItemResponseModel>())))
             .ToList();
+    }
+
+    public async Task<Guid?> GetSystemProjectIdAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        const string sql = """
+                           SELECT TOP 1 Id
+                           FROM Projects
+                           WHERE UserId = @UserId
+                             AND IsSystem = 1
+                           ORDER BY CreatedAtUtc;
+                           """;
+
+        using var connection = connectionFactory.CreateConnection();
+
+        return await connection.ExecuteScalarAsync<Guid?>(new CommandDefinition(
+            sql,
+            new { UserId = userId },
+            cancellationToken: cancellationToken));
     }
 
     public async Task<bool> UpdateAsync(

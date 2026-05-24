@@ -22,6 +22,9 @@ public class TaskItemEntityConfiguration : IEntityTypeConfiguration<TaskItem>
         builder.Property(x => x.Status)
             .IsRequired();
 
+        builder.Property(x => x.Priority)
+            .IsRequired(false);
+
         builder.Property(x => x.DeadlineUtc)
             .IsRequired(false);
 

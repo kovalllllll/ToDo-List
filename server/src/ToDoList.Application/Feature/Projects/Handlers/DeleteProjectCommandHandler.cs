@@ -18,16 +18,43 @@ public sealed class DeleteProjectCommandHandler(
         DeleteProjectCommand request,
         CancellationToken cancellationToken)
     {
+        var userId = currentUserService.UserId;
+
+        var project = await projectRepository.GetByIdAsync(
+            request.ProjectId,
+            userId,
+            cancellationToken);
+
+        if (project is null)
+        {
+            logger.LogWarning(
+                "User {UserId} attempted to delete project {ProjectId}, but it was not found",
+                userId,
+                request.ProjectId);
+
+            return Result<bool>.Failure(ProjectErrors.ProjectNotFound);
+        }
+
+        if (project.IsSystem)
+        {
+            logger.LogWarning(
+                "User {UserId} attempted to delete system project {ProjectId}",
+                userId,
+                request.ProjectId);
+
+            return Result<bool>.Failure(ProjectErrors.SystemProjectCannotBeDeleted);
+        }
+
         var deleted = await projectRepository.DeleteAsync(
             request.ProjectId,
-            currentUserService.UserId,
+            userId,
             cancellationToken);
 
         if (!deleted)
         {
             logger.LogWarning(
-                "User {UserId} attempted to delete project {ProjectId}, but it was not found",
-                currentUserService.UserId,
+                "User {UserId} attempted to delete project {ProjectId}, but deletion failed",
+                userId,
                 request.ProjectId);
 
             return Result<bool>.Failure(ProjectErrors.ProjectNotFound);
@@ -35,7 +62,7 @@ public sealed class DeleteProjectCommandHandler(
 
         logger.LogInformation(
             "User {UserId} deleted project {ProjectId}",
-            currentUserService.UserId,
+            userId,
             request.ProjectId);
 
         return Result<bool>.Success(true);

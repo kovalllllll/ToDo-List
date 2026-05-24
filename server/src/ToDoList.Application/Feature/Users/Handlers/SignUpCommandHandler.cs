@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using ToDoList.Application.Abstractions;
+using ToDoList.Application.Common.Constants;
 using ToDoList.Application.Common.Errors;
 using ToDoList.Application.Common.Results;
 using ToDoList.Application.Feature.Users.Commands;
 using ToDoList.Application.Feature.Users.Models;
+using ToDoList.Application.Repositories;
 using ToDoList.Domain.Entities;
 
 namespace ToDoList.Application.Feature.Users.Handlers;
@@ -13,7 +15,8 @@ namespace ToDoList.Application.Feature.Users.Handlers;
 public sealed class SignUpCommandHandler(
     ILogger<SignUpCommandHandler> logger,
     UserManager<ApplicationUser> userManager,
-    ITokenService tokenService)
+    ITokenService tokenService,
+    IProjectRepository projectRepository)
     : IRequestHandler<SignUpCommand, Result<AuthResponseModel>>
 {
     public async Task<Result<AuthResponseModel>> Handle(
@@ -50,6 +53,19 @@ public sealed class SignUpCommandHandler(
                     firstIdentityError?.Code ?? "Users.SignUpFailed",
                     firstIdentityError?.Description ?? "Registration failed."));
         }
+
+        var inboxProject = new Project(
+            user.Id,
+            ProjectDefaults.InboxName,
+            ProjectDefaults.InboxDescription,
+            ProjectDefaults.InboxColor,
+            isSystem: true);
+
+        logger.LogInformation("Creating default inbox project for user {UserId}", user.Id);
+
+        await projectRepository.CreateAsync(inboxProject, cancellationToken);
+
+        logger.LogInformation("Default inbox project created for user {UserId}", user.Id);
 
         var token = tokenService.GenerateAccessToken(user);
 

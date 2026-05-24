@@ -10,6 +10,8 @@ public interface IProjectRepository
     Task<ProjectResponseModel?> GetByIdAsync(Guid projectId, Guid userId, CancellationToken cancellationToken);
     Task<IReadOnlyCollection<ProjectResponseModel>> GetAllAsync(Guid userId, CancellationToken cancellationToken);
 
+    Task<Guid?> GetSystemProjectIdAsync(Guid userId, CancellationToken cancellationToken);
+    
     Task<bool> UpdateAsync(Guid projectId, Guid userId, string name, string? description, string? color,
         CancellationToken cancellationToken);
 

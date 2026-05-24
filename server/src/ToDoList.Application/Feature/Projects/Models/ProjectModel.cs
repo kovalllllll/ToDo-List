@@ -6,4 +6,5 @@ public sealed record ProjectModel(
     string Name,
     string? Description,
     string? Color,
+    bool IsSystem,
     DateTime CreatedAtUtc);

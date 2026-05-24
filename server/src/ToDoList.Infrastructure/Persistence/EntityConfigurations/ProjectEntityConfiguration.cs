@@ -22,6 +22,16 @@ public class ProjectEntityConfiguration : IEntityTypeConfiguration<Project>
         builder.Property(x => x.Color)
             .HasMaxLength(50);
 
+        builder.Property(x => x.IsSystem)
+            .IsRequired()
+            .HasDefaultValue(false);
+
+        builder.Property(x => x.CreatedAtUtc)
+            .IsRequired();
+
+        builder.HasIndex(x => new { x.UserId, x.Name })
+            .IsUnique();
+
         builder.HasOne(x => x.User)
             .WithMany(x => x.Projects)
             .HasForeignKey(x => x.UserId)
