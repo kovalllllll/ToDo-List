@@ -53,23 +53,23 @@ public static class ProjectEndpointExtensions
             .WithTags("Projects");
 
         app.MapGet(ApiRoutes.Projects.GetAllTasksByProjectId,
-            async (
-                Guid projectId,
-                GetProjectTasksRequest request,
-                ISender sender,
-                CancellationToken cancellationToken) =>
-            {
-                var filter = new ProjectTasksFilterModel(
-                    request.Search,
-                    request.Statuses,
-                    request.Priorities);
+                async (
+                    Guid projectId,
+                    GetProjectTasksRequest request,
+                    ISender sender,
+                    CancellationToken cancellationToken) =>
+                {
+                    var filter = new ProjectTasksFilterModel(
+                        request.Search,
+                        request.Statuses,
+                        request.Priorities);
 
-                var result = await sender.Send(
-                    new GetProjectTasksQuery(projectId, filter),
-                    cancellationToken);
+                    var result = await sender.Send(
+                        new GetProjectTasksQuery(projectId, filter),
+                        cancellationToken);
 
-                return result.ToMinimalApiResult();
-            }).RequireAuthorization()
+                    return result.ToMinimalApiResult();
+                }).RequireAuthorization()
             .WithTags("Projects");
 
         app.MapGet(ApiRoutes.Projects.GetById,

@@ -8,4 +8,5 @@
     <Project Path="ToDoList.Application/ToDoList.Application.csproj" />
     <Project Path="ToDoList.Domain/ToDoList.Domain.csproj" />
     <Project Path="ToDoList.Infrastructure/ToDoList.Infrastructure.csproj" />
+    <Project Path="../tests/ToDoList.Application.Tests/ToDoList.Application.Tests.csproj" />
 </Solution>

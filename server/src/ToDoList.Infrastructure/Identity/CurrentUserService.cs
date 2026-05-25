@@ -14,7 +14,7 @@ public class CurrentUserService(IHttpContextAccessor httpContextAccessor) : ICur
                 .HttpContext?
                 .User
                 .FindFirstValue(ClaimTypes.NameIdentifier);
-            
+
             return userIdValue == null
                 ? throw new UnauthorizedAccessException("User is not authenticated or NameIdentifier claim missing")
                 : Guid.Parse(userIdValue);

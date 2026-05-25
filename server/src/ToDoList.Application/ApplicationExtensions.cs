@@ -12,7 +12,7 @@ public static class ApplicationExtensions
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         ValidatorOptions.Global.LanguageManager.Culture = new CultureInfo("en");
-        
+
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(typeof(ApplicationExtensions).Assembly);
@@ -21,7 +21,7 @@ public static class ApplicationExtensions
         });
 
         services.AddValidatorsFromAssembly(typeof(ApplicationExtensions).Assembly);
-        
+
 
         return services;
     }

@@ -9,7 +9,7 @@ public class ProjectErrors
     public static readonly Error ProjectAlreadyExists =
         Error.Conflict("Projects.ProjectAlreadyExists",
             "Project already exists.");
-    
+
     public static readonly Error SystemProjectCannotBeDeleted =
         Error.Conflict(
             "Projects.SystemProjectCannotBeDeleted",
