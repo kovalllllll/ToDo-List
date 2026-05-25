@@ -1,4 +1,5 @@
 ﻿using ToDoList.Application.Feature.Projects.Models;
+using ToDoList.Application.Feature.TaskItems.Models;
 using ToDoList.Domain.Entities;
 
 namespace ToDoList.Application.Repositories;
@@ -11,7 +12,13 @@ public interface IProjectRepository
     Task<IReadOnlyCollection<ProjectResponseModel>> GetAllAsync(Guid userId, CancellationToken cancellationToken);
 
     Task<Guid?> GetSystemProjectIdAsync(Guid userId, CancellationToken cancellationToken);
-    
+
+    Task<IReadOnlyCollection<TaskItemResponseModel>> GetAllTasksByProjectIdAsync(
+        Guid projectId,
+        Guid userId,
+        ProjectTasksFilterModel filter,
+        CancellationToken cancellationToken);
+
     Task<bool> UpdateAsync(Guid projectId, Guid userId, string name, string? description, string? color,
         CancellationToken cancellationToken);
 

@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using ToDoList.Application.Abstractions;
+using ToDoList.Application.Common.Errors;
 using ToDoList.Application.Common.Results;
 using ToDoList.Application.Feature.Projects.Models;
 using ToDoList.Application.Feature.Projects.Queries;

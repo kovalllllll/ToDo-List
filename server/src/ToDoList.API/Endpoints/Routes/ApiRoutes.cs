@@ -17,7 +17,17 @@ public abstract class ApiRoutes
         public const string Create = BaseRoute;
         public const string GetAll = BaseRoute;
         public const string GetById = BaseRoute + "/{projectId}";
+        public const string GetAllTasksByProjectId = BaseRoute + "/{projectId}/tasks";
         public const string Update = BaseRoute + "/{projectId}";
         public const string Delete = BaseRoute + "/{projectId}";
+    }
+
+    public static class Tasks
+    {
+        private const string BaseRoute = Base + "/tasks";
+        public const string Create = BaseRoute;
+        public const string GetById = BaseRoute + "/{taskId}";
+        public const string Update = BaseRoute + "/{taskId}";
+        public const string Delete = BaseRoute + "/{taskId}";
     }
 }

@@ -11,12 +11,7 @@ public class ProjectErrors
             "Project already exists.");
     
     public static readonly Error SystemProjectCannotBeDeleted =
-        Error.Failure(
+        Error.Conflict(
             "Projects.SystemProjectCannotBeDeleted",
             "System project cannot be deleted.");
-
-    public static readonly Error SystemProjectCannotBeUpdated =
-        Error.Failure(
-            "Projects.SystemProjectCannotBeUpdated",
-            "System project cannot be updated.");
 }

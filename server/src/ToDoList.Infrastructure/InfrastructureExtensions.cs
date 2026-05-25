@@ -29,6 +29,7 @@ public static class InfrastructureExtensions
         services.AddScoped<ITokenService, JwtTokenService>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IProjectRepository, ProjectRepository>();
+        services.AddScoped<ITaskItemRepository, TaskItemRepository>();
         services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
 
         return services;

@@ -190,6 +190,78 @@ public class ProjectRepository(IDbConnectionFactory connectionFactory) : IProjec
             cancellationToken: cancellationToken));
     }
 
+    public async Task<IReadOnlyCollection<TaskItemResponseModel>> GetAllTasksByProjectIdAsync(Guid projectId,
+        Guid userId, ProjectTasksFilterModel filter,
+        CancellationToken cancellationToken)
+    {
+        var sql = """
+                  SELECT
+                      ti.Id,
+                      ti.ProjectId,
+                      ti.Title,
+                      ti.Description,
+                      ti.Status,
+                      ti.Priority,
+                      ti.DeadlineUtc
+                  FROM TaskItems ti
+                  INNER JOIN Projects p ON p.Id = ti.ProjectId
+                  WHERE ti.ProjectId = @ProjectId
+                    AND p.UserId = @UserId
+                  """;
+
+        var parameters = new DynamicParameters();
+        parameters.Add("ProjectId", projectId);
+        parameters.Add("UserId", userId);
+
+        if (!string.IsNullOrWhiteSpace(filter.Search))
+        {
+            sql += """
+
+                     AND (
+                         ti.Title LIKE @Search
+                         OR ti.Description LIKE @Search
+                     )
+                   """;
+
+            parameters.Add("Search", $"%{filter.Search}%");
+        }
+
+        if (filter.Statuses is { Count: > 0 })
+        {
+            sql += """
+
+                     AND ti.Status IN @Statuses
+                   """;
+
+            parameters.Add("Statuses", filter.Statuses);
+        }
+
+        if (filter.Priorities is { Count: > 0 })
+        {
+            sql += """
+
+                     AND ti.Priority IN @Priorities
+                   """;
+
+            parameters.Add("Priorities", filter.Priorities);
+        }
+
+        sql += """
+
+               ORDER BY ti.DeadlineUtc, ti.Title
+               """;
+
+        using var connection = connectionFactory.CreateConnection();
+
+        var tasks = await connection.QueryAsync<TaskItemResponseModel>(
+            new CommandDefinition(
+                sql,
+                parameters,
+                cancellationToken: cancellationToken));
+
+        return tasks.AsList();
+    }
+
     public async Task<bool> UpdateAsync(
         Guid projectId,
         Guid userId,

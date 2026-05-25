@@ -12,9 +12,9 @@ public sealed class DeleteProjectCommandHandler(
     ILogger<DeleteProjectCommandHandler> logger,
     IProjectRepository projectRepository,
     ICurrentUserService currentUserService)
-    : IRequestHandler<DeleteProjectCommand, Result<bool>>
+    : IRequestHandler<DeleteProjectCommand, Result>
 {
-    public async Task<Result<bool>> Handle(
+    public async Task<Result> Handle(
         DeleteProjectCommand request,
         CancellationToken cancellationToken)
     {
@@ -32,7 +32,7 @@ public sealed class DeleteProjectCommandHandler(
                 userId,
                 request.ProjectId);
 
-            return Result<bool>.Failure(ProjectErrors.ProjectNotFound);
+            return Result.Failure(ProjectErrors.ProjectNotFound);
         }
 
         if (project.IsSystem)
@@ -42,7 +42,7 @@ public sealed class DeleteProjectCommandHandler(
                 userId,
                 request.ProjectId);
 
-            return Result<bool>.Failure(ProjectErrors.SystemProjectCannotBeDeleted);
+            return Result.Failure(ProjectErrors.SystemProjectCannotBeDeleted);
         }
 
         var deleted = await projectRepository.DeleteAsync(
@@ -57,7 +57,7 @@ public sealed class DeleteProjectCommandHandler(
                 userId,
                 request.ProjectId);
 
-            return Result<bool>.Failure(ProjectErrors.ProjectNotFound);
+            return Result.Failure(ProjectErrors.ProjectNotFound);
         }
 
         logger.LogInformation(
@@ -65,6 +65,6 @@ public sealed class DeleteProjectCommandHandler(
             userId,
             request.ProjectId);
 
-        return Result<bool>.Success(true);
+        return Result.Success();
     }
 }

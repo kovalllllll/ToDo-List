@@ -62,7 +62,8 @@ public abstract class Program
         app.UseAuthorization();
 
         app.MapUserEndpoints()
-            .MapProjectEndpoints();
+            .MapProjectEndpoints()
+            .MapTaskItemEndpoints();
 
         app.Run();
     }

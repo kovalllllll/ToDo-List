@@ -4,5 +4,5 @@ using ToDoList.Application.Feature.Projects.Models;
 
 namespace ToDoList.Application.Feature.Projects.Commands;
 
-public record CreateProjectCommand(string Name, string? Description = null, string? Color = null)
+public record CreateProjectCommand(string Name, string? Description, string? Color)
     : IRequest<Result<ProjectResponseModel>>;
