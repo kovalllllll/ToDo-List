@@ -1,0 +1,84 @@
+:host {
+  display: block;
+}
+
+[mat-dialog-title] {
+  margin: 0;
+  padding-bottom: 20px;
+}
+
+:host ::ng-deep .mat-mdc-dialog-content {
+  max-height: none;
+  overflow: visible;
+  padding-top: 0;
+}
+
+mat-dialog-content {
+  max-height: none;
+  overflow: visible;
+  padding-top: 0;
+}
+
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding-top: 4px;
+}
+
+mat-form-field {
+  width: 100%;
+  min-width: 0;
+}
+
+:host ::ng-deep mat-form-field .mat-mdc-text-field-wrapper,
+:host ::ng-deep mat-form-field .mat-mdc-form-field-infix {
+  min-width: 0;
+}
+
+:host ::ng-deep mat-form-field:not(.description-field):not(.color-field) input[matInput] {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.description-field textarea[matInput] {
+  resize: none;
+  min-height: 5rem;
+  max-height: 7.5rem;
+  overflow-y: auto;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  line-height: 1.5;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+}
+
+.color-field {
+  .mat-mdc-form-field-infix {
+    min-height: 56px;
+  }
+}
+
+.color-input {
+  width: 100%;
+  max-width: 100%;
+  height: 40px;
+  padding: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+mat-dialog-actions {
+  padding-top: 8px;
+}

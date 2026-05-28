@@ -1,0 +1,33 @@
+<mat-card class="project-card" [routerLink]="['/projects', project.id, 'tasks']">
+  <mat-card-header>
+    <div mat-card-avatar class="color-dot" [style.background-color]="project.color || '#607d8b'"></div>
+    <mat-card-title>{{ project.name }}</mat-card-title>
+    <mat-card-subtitle>
+      {{ project.tasks.length }} task{{ project.tasks.length === 1 ? '' : 's' }}
+      @if (project.isSystem) {
+        <mat-chip class="system-chip">System</mat-chip>
+      }
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  @if (project.description) {
+    <mat-card-content class="description-area">
+      <p class="description-preview" [title]="project.description">{{ project.description }}</p>
+    </mat-card-content>
+  } @else {
+    <div class="description-spacer" aria-hidden="true"></div>
+  }
+
+  <mat-card-actions align="end" class="card-actions">
+    <button mat-button type="button" (click)="onEdit($event)">
+      <mat-icon>edit</mat-icon>
+      Edit
+    </button>
+    @if (!project.isSystem) {
+      <button mat-button color="warn" type="button" (click)="onDelete($event)">
+        <mat-icon>delete</mat-icon>
+        Delete
+      </button>
+    }
+  </mat-card-actions>
+</mat-card>

@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using ToDoList.API.Endpoints.Routes;
 using ToDoList.API.Extensions;
 using ToDoList.Application.Feature.Users.Commands;
@@ -23,7 +23,7 @@ public static class UserEndpointExtensions
                     var result = await sender.Send(command, cancellationToken);
 
                     return result.ToMinimalApiResult();
-                }).RequireAuthorization()
+                })
             .WithTags("Users");
 
         return app;

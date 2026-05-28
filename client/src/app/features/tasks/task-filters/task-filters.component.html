@@ -1,0 +1,26 @@
+<form [formGroup]="form" class="filters">
+  <mat-form-field appearance="outline">
+    <mat-label>Search</mat-label>
+    <input matInput formControlName="search" placeholder="Title or description" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Statuses</mat-label>
+    <mat-select formControlName="statuses" multiple>
+      @for (status of statuses; track status) {
+        <mat-option [value]="status">{{ statusLabels[status] }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Priorities</mat-label>
+    <mat-select formControlName="priorities" multiple>
+      @for (priority of priorities; track priority) {
+        <mat-option [value]="priority">{{ priorityLabels[priority] }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <button mat-button type="button" (click)="reset()">Reset</button>
+</form>

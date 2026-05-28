@@ -1,0 +1,101 @@
+<div class="page-container">
+  <header class="header">
+    <div class="header-content">
+      <a routerLink="/projects" class="back-link">← Back to projects</a>
+      <h1>{{ project()?.name || 'Tasks' }}</h1>
+      @if (project()?.description) {
+        <p class="project-description">{{ project()?.description }}</p>
+      }
+    </div>
+    <button mat-flat-button color="primary" type="button" class="new-task-btn" (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon>
+      New task
+    </button>
+  </header>
+
+  <section class="filters-panel">
+    <app-task-filters (filtersChange)="onFiltersChange($event)" />
+  </section>
+
+  <section class="tasks-panel">
+    @if (loading()) {
+      <div class="loading">
+        <mat-spinner />
+      </div>
+    } @else if (error()) {
+      <p class="error-text">{{ error() }}</p>
+    } @else if (tasks().length === 0) {
+      <div class="empty-state">
+        <p>No tasks found. Create one or adjust your filters.</p>
+      </div>
+    } @else {
+      <div class="table-wrapper">
+        <table mat-table [dataSource]="tasks()" class="task-table">
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef class="col-title">Title</th>
+            <td mat-cell *matCellDef="let task" class="col-title">
+              <div class="title-cell">
+                <strong>{{ task.title }}</strong>
+                @if (task.description) {
+                  <span>{{ task.description }}</span>
+                }
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef class="col-status">Status</th>
+            <td mat-cell *matCellDef="let task" class="col-status">
+              <mat-select
+                class="status-select"
+                [value]="task.status"
+                (selectionChange)="updateStatus(task, $event.value)"
+              >
+                @for (status of statuses; track status) {
+                  <mat-option [value]="status">{{ statusLabels[status] }}</mat-option>
+                }
+              </mat-select>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="priority">
+            <th mat-header-cell *matHeaderCellDef class="col-priority">Priority</th>
+            <td mat-cell *matCellDef="let task" class="col-priority">
+              {{ getPriorityLabel(task) }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="deadline">
+            <th mat-header-cell *matHeaderCellDef class="col-deadline">Deadline</th>
+            <td mat-cell *matCellDef="let task" class="col-deadline">
+              {{ task.deadlineUtc | relativeTime }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="col-actions">Actions</th>
+            <td mat-cell *matCellDef="let task" class="col-actions">
+              <div class="actions-cell">
+                <button mat-icon-button type="button" (click)="openEditDialog(task)" aria-label="Edit task">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  color="warn"
+                  type="button"
+                  (click)="deleteTask(task)"
+                  aria-label="Delete task"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+    }
+  </section>
+</div>
