@@ -1,0 +1,54 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Edit project' : 'New project' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid" (ngSubmit)="submit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Name</mat-label>
+      <input
+        matInput
+        formControlName="name"
+        [maxlength]="nameMaxLength"
+        autocomplete="off"
+      />
+      <mat-hint align="end">{{ form.controls.name.value.length }} / {{ nameMaxLength }}</mat-hint>
+      @if (form.controls.name.hasError('required')) {
+        <mat-error>Name is required</mat-error>
+      }
+      @if (form.controls.name.hasError('maxlength')) {
+        <mat-error>Name must not exceed {{ nameMaxLength }} characters</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width description-field">
+      <mat-label>Description</mat-label>
+      <textarea
+        matInput
+        rows="4"
+        formControlName="description"
+        [maxlength]="descriptionMaxLength"
+      ></textarea>
+      <mat-hint align="end">
+        {{ form.controls.description.value.length }} / {{ descriptionMaxLength }}
+      </mat-hint>
+      @if (form.controls.description.hasError('maxlength')) {
+        <mat-error>Description must not exceed {{ descriptionMaxLength }} characters</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width color-field">
+      <mat-label>Color</mat-label>
+      <input matInput type="color" formControlName="color" class="color-input" />
+      <mat-hint>Hex color, e.g. #607d8b</mat-hint>
+      @if (form.controls.color.hasError('pattern')) {
+        <mat-error>Color must be a valid hex code</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()">Cancel</button>
+  <button mat-flat-button color="primary" type="button" (click)="submit()" [disabled]="form.invalid">
+    {{ isEdit ? 'Save' : 'Create' }}
+  </button>
+</mat-dialog-actions>

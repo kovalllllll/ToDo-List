@@ -1,0 +1,116 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Edit task' : 'New task' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid" (ngSubmit)="submit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Title</mat-label>
+      <input
+        matInput
+        formControlName="title"
+        [maxlength]="titleMaxLength"
+        autocomplete="off"
+      />
+      <mat-hint align="end">{{ form.controls.title.value.length }} / {{ titleMaxLength }}</mat-hint>
+      @if (form.controls.title.hasError('required')) {
+        <mat-error>Title is required</mat-error>
+      }
+      @if (form.controls.title.hasError('maxlength')) {
+        <mat-error>Title must not exceed {{ titleMaxLength }} characters</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width description-field">
+      <mat-label>Description</mat-label>
+      <textarea
+        matInput
+        rows="4"
+        formControlName="description"
+        [maxlength]="descriptionMaxLength"
+      ></textarea>
+      <mat-hint align="end">
+        {{ form.controls.description.value.length }} / {{ descriptionMaxLength }}
+      </mat-hint>
+      @if (form.controls.description.hasError('maxlength')) {
+        <mat-error>Description must not exceed {{ descriptionMaxLength }} characters</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="field-row">
+      <mat-form-field appearance="outline" class="field-half">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status">
+          @for (status of statuses; track status) {
+            <mat-option [value]="status">{{ statusLabels[status] }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field-half">
+        <mat-label>Priority</mat-label>
+        <mat-select formControlName="priority">
+          <mat-option [value]="null">None</mat-option>
+          @for (priority of priorities; track priority) {
+            <mat-option [value]="priority">{{ priorityLabels[priority] }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="deadline-section">
+      <div class="deadline-header">
+        <span class="section-label">Deadline</span>
+        @if (form.controls.deadlineDate.value) {
+          <button mat-button type="button" class="clear-deadline" (click)="clearDeadline()">
+            Clear
+          </button>
+        }
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Date</mat-label>
+          <input
+            matInput
+            [matDatepicker]="deadlinePicker"
+            formControlName="deadlineDate"
+            [min]="minDeadlineDate"
+            placeholder="Choose date"
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="deadlinePicker" />
+          <mat-datepicker #deadlinePicker />
+          @if (hasNoAvailableTimes()) {
+            <mat-error>No available times for today. Choose a later date.</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="field-row time-row">
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Hour</mat-label>
+            <mat-select formControlName="deadlineHour" placeholder="Hour">
+              @for (hour of availableHours; track hour) {
+                <mat-option [value]="hour">{{ formatTimePart(hour) }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="field-half">
+            <mat-label>Minute</mat-label>
+            <mat-select formControlName="deadlineMinute" placeholder="Minute">
+              @for (minute of availableMinutes; track minute) {
+                <mat-option [value]="minute">{{ formatTimePart(minute) }}</mat-option>
+              }
+            </mat-select>
+            @if (hasFutureDeadlineError()) {
+              <mat-error>Due date must be in the future</mat-error>
+            }
+          </mat-form-field>
+        </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()">Cancel</button>
+  <button mat-flat-button color="primary" type="button" (click)="submit()" [disabled]="form.invalid">
+    {{ isEdit ? 'Save' : 'Create' }}
+  </button>
+</mat-dialog-actions>

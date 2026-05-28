@@ -26,9 +26,5 @@ public class UpdateTaskItemCommandValidator : AbstractValidator<UpdateTaskItemCo
             .IsInEnum()
             .WithMessage("Invalid status value.");
 
-        RuleFor(x => x.DeadlineUtc)
-            .GreaterThan(DateTime.UtcNow)
-            .When(x => x.DeadlineUtc.HasValue)
-            .WithMessage("Due date must be in the future.");
     }
 }

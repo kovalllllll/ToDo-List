@@ -1,0 +1,33 @@
+.filters {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+  width: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.filters mat-form-field {
+  width: 100%;
+  min-width: 0;
+}
+
+.filters button {
+  align-self: center;
+  margin-top: 8px;
+}
+
+@media (max-width: 900px) {
+  .filters {
+    grid-template-columns: 1fr;
+  }
+
+  .filters button {
+    justify-self: start;
+    margin-top: 0;
+  }
+}

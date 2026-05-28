@@ -138,20 +138,20 @@ public class TaskItemValidatorsTests
     }
 
     [Fact]
-    public void UpdateTaskItem_ShouldFail_WhenDeadlineInPast()
+    public void UpdateTaskItem_ShouldPass_WhenDeadlineInPast()
     {
         var validator = new UpdateTaskItemCommandValidator();
         var command = new UpdateTaskItemCommand(
             Guid.NewGuid(),
             "Title",
             null,
-            TaskItemStatus.Todo,
+            TaskItemStatus.InProgress,
             null,
             DateTime.UtcNow.AddMinutes(-5));
 
         var result = validator.Validate(command);
 
-        result.IsValid.Should().BeFalse();
+        result.IsValid.Should().BeTrue();
     }
 
     [Fact]

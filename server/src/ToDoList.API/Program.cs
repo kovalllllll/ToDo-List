@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Scalar.AspNetCore;
 using Serilog;
 using ToDoList.Application;
@@ -16,6 +18,28 @@ public abstract class Program
 
         builder.Host.UseSerilog((ctx, config) =>
             config.ReadFrom.Configuration(ctx.Configuration));
+
+        builder.Services.ConfigureHttpJsonOptions(options =>
+        {
+            options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+            options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        });
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAngularDev", policy =>
+            {
+                policy
+                    .WithOrigins(
+                        "http://localhost:4200",
+                        "http://localhost:4201",
+                        "http://localhost:4202")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            });
+        });
 
         // Add services to the container.
         builder.Services.AddAuthorization()
@@ -57,6 +81,9 @@ public abstract class Program
         }
 
         app.UseHttpsRedirection();
+
+        // CORS must be before Authentication/Authorization
+        app.UseCors("AllowAngularDev");
 
         app.UseAuthentication();
         app.UseAuthorization();

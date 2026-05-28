@@ -1,0 +1,15 @@
+<mat-toolbar color="primary">
+  <a routerLink="/projects" class="brand">ToDo List</a>
+  <span class="spacer"></span>
+  @if (user(); as currentUser) {
+    <span class="user-email">{{ currentUser.email }}</span>
+  }
+  <button mat-button type="button" (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    Logout
+  </button>
+</mat-toolbar>
+
+<main>
+  <router-outlet />
+</main>

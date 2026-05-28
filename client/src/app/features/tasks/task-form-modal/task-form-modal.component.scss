@@ -1,0 +1,112 @@
+:host {
+  display: block;
+}
+
+[mat-dialog-title] {
+  margin: 0;
+  padding-bottom: 20px;
+}
+
+:host ::ng-deep .mat-mdc-dialog-content {
+  max-height: none;
+  overflow: visible;
+  padding-top: 0;
+}
+
+mat-dialog-content {
+  max-height: none;
+  overflow: visible;
+  padding-top: 0;
+}
+
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding-top: 4px;
+}
+
+mat-form-field {
+  width: 100%;
+  min-width: 0;
+}
+
+:host ::ng-deep mat-form-field .mat-mdc-text-field-wrapper,
+:host ::ng-deep mat-form-field .mat-mdc-form-field-infix {
+  min-width: 0;
+}
+
+:host ::ng-deep mat-form-field:not(.description-field) input[matInput] {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+}
+
+.field-half {
+  min-width: 0;
+}
+
+@media (max-width: 560px) {
+  .field-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.description-field textarea[matInput] {
+  resize: none;
+  min-height: 5rem;
+  max-height: 7.5rem;
+  overflow-y: auto;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  line-height: 1.5;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+}
+
+.deadline-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.deadline-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.section-label {
+  font-size: 0.875rem;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.clear-deadline {
+  min-width: auto;
+  padding: 0 8px;
+}
+
+mat-dialog-actions {
+  padding-top: 8px;
+}
+
+.time-row {
+  margin-top: 4px;
+}

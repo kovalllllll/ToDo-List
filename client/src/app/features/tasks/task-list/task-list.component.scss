@@ -1,0 +1,136 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.header-content {
+  flex: 1 1 280px;
+  min-width: 0;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 8px;
+  text-decoration: none;
+}
+
+.header h1 {
+  margin: 0 0 8px;
+  word-break: break-word;
+}
+
+.project-description {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.6);
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.new-task-btn {
+  flex-shrink: 0;
+}
+
+.filters-panel {
+  margin-bottom: 16px;
+}
+
+.tasks-panel {
+  min-width: 0;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.task-table {
+  width: 100%;
+  min-width: 760px;
+  background: #fff;
+}
+
+.col-title {
+  min-width: 220px;
+  max-width: 420px;
+}
+
+.col-status {
+  width: 160px;
+  min-width: 160px;
+}
+
+.col-priority,
+.col-deadline {
+  width: 120px;
+  min-width: 120px;
+  white-space: nowrap;
+}
+
+.col-actions {
+  width: 112px;
+  min-width: 112px;
+}
+
+.title-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 0;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.title-cell span {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.875rem;
+}
+
+.status-select {
+  width: 100%;
+  max-width: 148px;
+  font-size: 0.875rem;
+}
+
+:host ::ng-deep .status-select .mat-mdc-select-trigger {
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  background: #fafafa;
+}
+
+:host ::ng-deep .status-select .mat-mdc-select-arrow-wrapper {
+  transform: translateY(0);
+}
+
+.actions-cell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.loading,
+.empty-state {
+  display: flex;
+  justify-content: center;
+  padding: 48px 0;
+}
+
+.empty-state p {
+  color: rgba(0, 0, 0, 0.6);
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .new-task-btn {
+    width: 100%;
+  }
+}

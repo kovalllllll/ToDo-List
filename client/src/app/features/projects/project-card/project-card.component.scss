@@ -1,0 +1,55 @@
+.project-card {
+  cursor: pointer;
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+:host ::ng-deep .mat-mdc-card-header {
+  flex-shrink: 0;
+}
+
+:host ::ng-deep .mat-mdc-card-header-text {
+  min-width: 0;
+}
+
+mat-card-title {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.color-dot {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+
+.system-chip {
+  margin-left: 8px;
+  height: 24px;
+}
+
+.description-area {
+  min-height: 0;
+  padding-top: 0;
+}
+
+.description-spacer {
+  min-height: 4.5rem;
+}
+
+.description-preview {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.6);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.card-actions {
+  padding-top: 8px;
+}
